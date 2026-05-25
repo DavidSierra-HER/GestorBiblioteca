@@ -1,2 +1,5 @@
 1779706566539	Rename package 'com.frayd.dam.biblioteca.GestorBiblioteca'
 1779706570923	Delete element
+1779707668726	Rename type 'Libros'
+1779707677588	Rename type 'Prestamos'
+1779707685415	Rename type 'Socios'
