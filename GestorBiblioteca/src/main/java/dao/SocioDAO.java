@@ -1,5 +1,12 @@
 package dao;
 
-public class SocioDAO {
+public interface SocioDAO {
+	
+	public void guardarSocio();
+	public void obtenerSocio();
+	public void modificarSocio();
+	public void eliminarSocio();
+	public void buscarDNI();
+	
 
 }
