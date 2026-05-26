@@ -1,5 +1,14 @@
 package dao;
 
-public class LibroDAO {
+public interface LibroDAO {
 
+	public void guardarLibro();
+	public void obtenerLibreria();
+	public void modificarLibro();
+	public void eliminarLibro();
+	public void buscarTitulo();
+	public void buscarAutor();
+	public void buscarISBN();
+	
+	
 }
