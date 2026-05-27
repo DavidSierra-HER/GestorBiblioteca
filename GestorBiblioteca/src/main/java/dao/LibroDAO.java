@@ -2,7 +2,7 @@ package dao;
 
 public interface LibroDAO {
 
-	public void guardarLibro();
+	
 	public void obtenerLibreria();
 	public void modificarLibro();
 	public void eliminarLibro();
