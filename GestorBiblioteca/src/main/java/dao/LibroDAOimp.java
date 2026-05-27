@@ -24,27 +24,27 @@ public class LibroDAOimp implements LibroDAO{
 
 	@Override
 	public void modificarLibro(Libro libro) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void eliminarLibro(String isbn) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public List<Libro>  buscarTitulo(String titulo) {
 		return null;
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public List<Libro>  buscarAutor(String autor) {
 		return null;
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -52,7 +52,7 @@ public class LibroDAOimp implements LibroDAO{
 	public Libro buscarISBN(String isbn) {
 		
 		return null;
-		// TODO Auto-generated method stub
+		
 		
 	}
 
