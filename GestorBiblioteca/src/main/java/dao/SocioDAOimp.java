@@ -27,6 +27,8 @@ public class SocioDAOimp implements SocioDAO{
 	private final String ELIMINAR = "DELETE FROM SOCIO WHERE DNI = ?;";
 	private final String BUSCAR_POR_DNI = "SELECT * FROM SOCIO WHERE DNI = ?;";	
 	
+	
+	//metodo para obtener todo el listado de los socios
 	@Override
 	public List<Socio> obtenerSocio() {
 		List<Socio> listaSocio= new ArrayList<Socio>();
@@ -43,6 +45,8 @@ public class SocioDAOimp implements SocioDAO{
 		return listaSocio;
 	}
 
+	
+	//metodo de registro de los socios
 	@Override
 	public boolean registrarSocio(Socio socio) {
 		boolean registrar = false;
@@ -65,6 +69,8 @@ public class SocioDAOimp implements SocioDAO{
 		return registrar;
 	}
 
+	
+	//metodo de modificacion de los socios
 	@Override
 	public boolean modificarSocio(Socio socio) {
 		boolean actualizar = false;
@@ -88,6 +94,8 @@ public class SocioDAOimp implements SocioDAO{
 		return actualizar;
 	}
 
+	
+	//metodo de eliminacion de socios
 	@Override
 	public void eliminarSocio(String dni) {
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(ELIMINAR)) {
@@ -101,6 +109,8 @@ public class SocioDAOimp implements SocioDAO{
 		
 	}
 
+	
+	//busqueda por DNI el metodo 
 	@Override
 	public Socio buscarDNI(String dni) {
 		 Socio socio = null;
