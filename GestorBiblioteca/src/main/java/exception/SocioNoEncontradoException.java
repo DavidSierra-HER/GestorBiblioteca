@@ -10,26 +10,26 @@ package exception;
  */
 
 
-public class PrestamoVencidoException extends Exception {
+public class SocioNoEncontradoException extends Exception {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public PrestamoVencidoException() {
+	public SocioNoEncontradoException() {
 		super();
 	}
 	
-	public PrestamoVencidoException(String mensaje) {
+	public SocioNoEncontradoException(String mensaje) {
 		super(mensaje);
 	}
 	
-	public PrestamoVencidoException(Throwable causa) {
+	public SocioNoEncontradoException(Throwable causa) {
 		super(causa);
 	}
 
-	public PrestamoVencidoException(String mensaje, Throwable causa) {
+	public SocioNoEncontradoException(String mensaje, Throwable causa) {
 		super(mensaje, causa);
 	}
 
