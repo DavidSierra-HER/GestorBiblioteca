@@ -1,6 +1,5 @@
 package exception;
 
-
 /**
  * excepciones personalizadas
  * 
@@ -10,26 +9,26 @@ package exception;
  */
 
 
-public class PrestamoVencidoException extends Exception {
+public class LibroNoEncontradoException extends Exception {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public PrestamoVencidoException() {
+	public LibroNoEncontradoException() {
 		super();
 	}
 	
-	public PrestamoVencidoException(String mensaje) {
+	public LibroNoEncontradoException(String mensaje) {
 		super(mensaje);
 	}
 	
-	public PrestamoVencidoException(Throwable causa) {
+	public LibroNoEncontradoException(Throwable causa) {
 		super(causa);
 	}
 
-	public PrestamoVencidoException(String mensaje, Throwable causa) {
+	public LibroNoEncontradoException(String mensaje, Throwable causa) {
 		super(mensaje, causa);
 	}
 
