@@ -31,7 +31,7 @@ public class SocioServicio {
     }
     
     //se implemnta el dao dentro de los servicios
-    public SocioServicio() {
+    private SocioServicio() {
 		this.dao = new SocioDAOimp();
 	}
     
@@ -45,7 +45,7 @@ public class SocioServicio {
     	List<Socio> socios = dao.obtenerSocio();
     	Socio s = null;
     	for (Socio elem : socios) {
-    		if(elem.getDni() == dni)
+    		if(elem.getDni().equals(dni))
     			s = elem;
 		}    	
     	if(s == null) {
@@ -75,17 +75,13 @@ public class SocioServicio {
     }
     
     //Eliminación del Socio
-    public Socio eliminar(String dni) {
-    	List<Socio> socios = dao.obtenerSocio(); 
-    	Socio s = null;
-    	for (Socio elem : socios) {
-    		if(elem.getDni() == dni)
-    			dao.eliminarSocio(dni);
-		}    	
-    	if(s == null) {
-    		System.err.println("El DNI " + dni + " NO existe.");
-    	}
-    	return s; 
-    }
+    public void eliminar(String dni) {
+    	Socio s = obtenerSocio(dni);
+	    if(s != null) {
+	        dao.eliminarSocio(dni);
+	    } else {
+	        System.err.println("El DNI " + dni + " NO existe.");
+	    }
+	}
 
 }
