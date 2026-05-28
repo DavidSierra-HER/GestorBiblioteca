@@ -31,7 +31,7 @@ public class LibroServicio {
 	
     
     //impementamos el da dentro del servicio
-    public LibroServicio() {
+    private LibroServicio() {
 		this.dao = new LibroDAOimp();
 	}
     
@@ -47,7 +47,7 @@ public class LibroServicio {
     	List<Libro> libros = dao.obtenerLibros(); 
     	Libro l = null;
     	for (Libro elem : libros) {
-    		if(elem.getIsbn() == isbn)
+    		if(elem.getIsbn().equals(isbn))
     			l = elem;
 		}    	
     	if(l == null) {
@@ -61,7 +61,7 @@ public class LibroServicio {
     	List<Libro> libros = dao.obtenerLibros(); 
     	Libro l = null;
     	for (Libro elem : libros) {
-    		if(elem.getAutor() == autor)
+    		if(elem.getAutor().equals(autor))
     			l = elem;
 		}    	
     	if(l == null) {
@@ -75,7 +75,7 @@ public class LibroServicio {
     	List<Libro> libros = dao.obtenerLibros(); 
     	Libro l = null;
     	for (Libro elem : libros) {
-    		if(elem.getTitulo() == titulo)
+    		if(elem.getTitulo().equals(titulo))
     			l = elem;
 		}    	
     	if(l == null) {
@@ -106,17 +106,13 @@ public class LibroServicio {
     
     
   //eliminamos libro en caso de que no exista salta un error
-    public Libro eliminar(String isbn) {
-    	List<Libro> libros = dao.obtenerLibros(); 
-    	Libro l = null;
-    	for (Libro elem : libros) {
-    		if(elem.getIsbn() == isbn)
-    			dao.eliminarLibro(isbn);
-		}    	
-    	if(l == null) {
-    		System.err.println("El ISBN " + isbn + " NO existe.");
+   	public void eliminar(String isbn) {
+    	    Libro l = obtenerISBN(isbn);
+    	    if(l != null) {
+    	        dao.eliminarLibro(isbn);
+    	    } else {
+    	        System.err.println("El ISBN " + isbn + " NO existe.");
+    	    }
     	}
-    	return l; 
-    }
 
 }
