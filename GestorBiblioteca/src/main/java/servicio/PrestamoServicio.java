@@ -34,10 +34,21 @@ public class PrestamoServicio {
         this.libroDAO = new LibroDAOimp();
     }
 
-    public List<Prestamo> obtenerTodos() { return dao.obtenerTodosLosPrestamos(); }
-    public List<Prestamo> obtenerActivos() { return dao.buscarPrestamosActivos(); }
-    public List<Prestamo> obtenerVencidos() { return dao.buscarPrestamosVencidos(); }
-    public List<Prestamo> obtenerDevueltos() { return dao.buscarPrestamosDevueltos(); }
+    public List<Prestamo> obtenerTodos() { 
+    	return dao.obtenerTodosLosPrestamos(); 
+    	}
+  
+    public List<Prestamo> obtenerActivos() { 
+    	return dao.buscarPrestamosActivos(); 
+    	}
+  
+    public List<Prestamo> obtenerVencidos() { 
+    	return dao.buscarPrestamosVencidos(); 
+    	}
+   
+    public List<Prestamo> obtenerDevueltos() { 
+    	return dao.buscarPrestamosDevueltos(); 
+    	}
 
     // Registra préstamo si el libro tiene ejemplares disponibles,decrementa las unidades disponible en la base de datos y en caso de que no haya muestra error.
     public void registrar(Prestamo prestamo) {
