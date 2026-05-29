@@ -17,6 +17,13 @@ import modelo.Libro;
 import modelo.Prestamo;
 import modelo.Socio;
 
+/**
+ * Está es la clase para guardar los elementos binarios con sus metodos
+ * 
+ * @author  David
+ * @version 1.0
+ * @since   2026-05-26
+ */
 
 public class GestorFicheros implements Serializable   {
 
@@ -30,7 +37,7 @@ public class GestorFicheros implements Serializable   {
 
 	
 	
-	
+	//Cremos el objeto binario backup.bak donde guardamos todos los elementos de forma local 
 	public void copiaSeguridad() {	
 	try (ObjectOutputStream oos =
 	        new ObjectOutputStream(
@@ -51,6 +58,12 @@ public class GestorFicheros implements Serializable   {
 	}
 	}
 	
+	
+	//Este metodo, hace varios elementos primero recupera el backup y los guarda en listas, 
+	//después purgamos  las tablas para evitar duplicados y finalmente registrar de nuevo todos los libros
+	//daba un error en los ois.read Type safety: Unchecked cast from Object to List<Socio> pero no deberia afectar
+	
+	@SuppressWarnings("unchecked")
 	public void RestaurarCopiaSeguridad() {	
 	try (ObjectInputStream ois =
 	        new ObjectInputStream(
@@ -61,9 +74,19 @@ public class GestorFicheros implements Serializable   {
 		List<Socio> socios = (List<Socio>) ois.readObject();
 	    List<Prestamo> prestamos = (List<Prestamo>) ois.readObject();
 	    
-	    dao = (LibroDAOimp) libros;
-	    dao1 = (SocioDAOimp) socios;
-	    dao2 = (PrestamoDaoimp) prestamos;
+	    dao.purgarTabla();
+	    dao1.purgarTabla();
+	    dao2.purgarTabla();
+	    
+	    for(Libro l : libros) {
+	    	dao.registrarLibro(l);
+	    }for(Socio s : socios) {
+	    	dao1.registrarSocio(s);
+	    }for(Prestamo p : prestamos) {
+	    	dao2.registrarPrestamo(p);
+	    }
+	    
+	    
 	    
 	} catch (ClassNotFoundException e) {
 	    e.printStackTrace();
