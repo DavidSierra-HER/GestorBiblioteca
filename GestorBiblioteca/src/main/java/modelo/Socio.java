@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -12,10 +13,14 @@ import java.util.Objects;
  */
 
 
-public class Socio {
+public class Socio implements Serializable {
 	
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//atributos de la clase Socio
 	private String dni;
 	private String nombre;

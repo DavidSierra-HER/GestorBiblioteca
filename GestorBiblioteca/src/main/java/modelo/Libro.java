@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -10,12 +11,16 @@ import java.util.Objects;
  * @since   2026-05-26
  */
 
-public class Libro {
+public class Libro implements Serializable {
 	
 
 	
 //	atributos de la clase libro.
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String isbn;
 	private String titulo;
 	private String autor;

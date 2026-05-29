@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -11,8 +12,12 @@ import java.util.Objects;
  * @since   2026-05-26
  */
 
-public class Prestamo {
+public class Prestamo implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//atributos de la clase prestamo
 	private String id;
 	private String estado;
