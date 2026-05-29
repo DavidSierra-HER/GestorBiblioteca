@@ -26,6 +26,7 @@ public class LibroDAOimp implements LibroDAO{
 	private final String BUSCAR_POR_ISBN = "SELECT * FROM LIBRO WHERE ISBN = ?;";	
 	private final String BUSCAR_POR_AUTOR = "SELECT * FROM LIBRO WHERE AUTOR = ?;";	
 	private final String BUSCAR_POR_TITULO = "SELECT * FROM LIBRO WHERE TITULO = ?;";
+	private final String PURGARTABLA = "TRUNCATE TABLE LIBRO;";
 	
 	//método para mostrar los libros
 	@Override
@@ -202,4 +203,16 @@ public class LibroDAOimp implements LibroDAO{
 
 		    return libro;
 }
+
+
+	//purga total de la tabla para evitar duplicados al restaurar
+	@Override
+	public void purgarTabla() {
+			try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(PURGARTABLA)) {
+				stmt.executeUpdate();
+				System.out.println("tabla purgada con éxito");
+			} catch (SQLException e) {
+				System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+			}
+	}
 }

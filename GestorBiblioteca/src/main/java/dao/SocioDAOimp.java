@@ -26,6 +26,7 @@ public class SocioDAOimp implements SocioDAO{
 	private final String ACTUALIZAR = "UPDATE SOCIO SET DNI = ?, NOMBRE = ?, DIRECCION = ?, TLFN = ?, ALTA = ? WHERE DNI = ?;";	
 	private final String ELIMINAR = "DELETE FROM SOCIO WHERE DNI = ?;";
 	private final String BUSCAR_POR_DNI = "SELECT * FROM SOCIO WHERE DNI = ?;";	
+	private final String PURGARTABLA = "TRUNCATE TABLE SOCIO;";
 	
 	
 	//metodo para obtener todo el listado de los socios
@@ -138,6 +139,17 @@ public class SocioDAOimp implements SocioDAO{
 		    }
 
 		    return socio;
+}
+
+
+	@Override
+	public void purgarTabla() {
+		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(PURGARTABLA)) {
+			stmt.executeUpdate();
+			System.out.println("tabla purgada con éxito");
+		} catch (SQLException e) {
+			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+		}
 }
 	
 
