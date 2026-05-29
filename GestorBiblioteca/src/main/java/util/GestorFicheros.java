@@ -31,9 +31,9 @@ public class GestorFicheros implements Serializable   {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private LibroDAOimp dao;
-	private SocioDAOimp dao1;
-	private PrestamoDaoimp dao2;
+	private LibroDAOimp libroDAO = new LibroDAOimp();
+	private SocioDAOimp socioDAO = new SocioDAOimp();
+	private PrestamoDaoimp prestamoDAO = new PrestamoDaoimp();
 
 	
 	
@@ -44,11 +44,11 @@ public class GestorFicheros implements Serializable   {
 	            new BufferedOutputStream(
 	                new FileOutputStream("backup.bak")))) {
 
-	    oos.writeObject(dao.obtenerLibros());
+	    oos.writeObject(libroDAO.obtenerLibros());
 	    
-	    oos.writeObject(dao1.obtenerSocio());
+	    oos.writeObject(socioDAO.obtenerSocio());
 
-	    oos.writeObject(dao2.obtenerTodosLosPrestamos());
+	    oos.writeObject(prestamoDAO.obtenerTodosLosPrestamos());
 	    
 	    System.out.println("Copia de seguridad realizada.");
 
@@ -64,7 +64,7 @@ public class GestorFicheros implements Serializable   {
 	//daba un error en los ois.read Type safety: Unchecked cast from Object to List<Socio> pero no deberia afectar
 	
 	@SuppressWarnings("unchecked")
-	public void RestaurarCopiaSeguridad() {	
+	public void restaurarCopiaSeguridad() {	
 	try (ObjectInputStream ois =
 	        new ObjectInputStream(
 	            new BufferedInputStream(
@@ -74,16 +74,16 @@ public class GestorFicheros implements Serializable   {
 		List<Socio> socios = (List<Socio>) ois.readObject();
 	    List<Prestamo> prestamos = (List<Prestamo>) ois.readObject();
 	    
-	    dao.purgarTabla();
-	    dao1.purgarTabla();
-	    dao2.purgarTabla();
+	    prestamoDAO.purgarTabla();
+	    socioDAO.purgarTabla();
+	    libroDAO.purgarTabla();
 	    
 	    for(Libro l : libros) {
-	    	dao.registrarLibro(l);
+	    	libroDAO.registrarLibro(l);
 	    }for(Socio s : socios) {
-	    	dao1.registrarSocio(s);
+	    	socioDAO.registrarSocio(s);
 	    }for(Prestamo p : prestamos) {
-	    	dao2.registrarPrestamo(p);
+	    	prestamoDAO.registrarPrestamo(p);
 	    }
 	    
 	    
