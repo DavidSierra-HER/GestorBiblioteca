@@ -21,6 +21,6 @@ public interface PrestamoDAO {
 	public List<Prestamo> buscarPrestamosActivos();
 	public List<Prestamo> buscarPrestamosVencidos();
 	public List<Prestamo> buscarPrestamosDevueltos();
-	
+	public void purgarTabla();
 	
 }

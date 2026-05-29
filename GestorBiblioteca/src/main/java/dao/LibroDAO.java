@@ -21,6 +21,6 @@ public interface LibroDAO {
 	public List<Libro> buscarTitulo(String titulo);
 	public List<Libro> buscarAutor(String autor);
 	public Libro buscarISBN(String isbn);
-	
+	public void purgarTabla();
 	
 }

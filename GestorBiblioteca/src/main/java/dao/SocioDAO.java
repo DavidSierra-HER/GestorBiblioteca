@@ -20,6 +20,6 @@ public interface SocioDAO {
 	public boolean modificarSocio(Socio socio);
 	public void eliminarSocio(String dni);
 	public Socio buscarDNI(String dni);
-	
+	public void purgarTabla();
 
 }

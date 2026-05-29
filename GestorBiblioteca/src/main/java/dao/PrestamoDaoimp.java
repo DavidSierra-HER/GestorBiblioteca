@@ -33,7 +33,7 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	private final String BUSCAR_POR_ACTIVOS = "SELECT * FROM PRESTAMO WHERE ESTADO = 'ACTIVO';";	
 	private final String BUSCAR_POR_VENCIDOS = "SELECT * FROM PRESTAMO WHERE ESTADO = 'VENCIDO'";	
 	private final String BUSCAR_POR_DEVUELTOS = "SELECT * FROM PRESTAMO WHERE ESTADO = 'DEVUELTO'";	
-	
+	private final String PURGARTABLA = "TRUNCATE TABLE PRESTAMO;";
 	
 	//Método del listado de prestamo
 	@Override
@@ -218,6 +218,17 @@ public class PrestamoDaoimp implements PrestamoDAO{
 		}
 		return listaPrestamo;
 	}
+
+
+	@Override
+	public void purgarTabla() {
+		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(PURGARTABLA)) {
+			stmt.executeUpdate();
+			System.out.println("tabla purgada con éxito");
+		} catch (SQLException e) {
+			System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+		}
+}
 	
 
 
