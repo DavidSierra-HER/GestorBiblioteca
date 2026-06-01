@@ -10,7 +10,7 @@ public class PanelInicio extends JPanel {
     public PanelInicio(Runnable irLibros, Runnable irSocios, Runnable irPrestamos) {
         setLayout(new BorderLayout());
 
-        // Título
+        // Título.
         JLabel titulo = new JLabel("GestorBiblioteca", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 36));
         titulo.setBorder(BorderFactory.createEmptyBorder(80, 0, 40, 0));
@@ -47,7 +47,7 @@ public class PanelInicio extends JPanel {
 
         add(panelCentro, BorderLayout.CENTER);
 
-        // Eventos
+        // Eventos 1
         btnLibros.addActionListener(e -> irLibros.run());
         btnSocios.addActionListener(e -> irSocios.run());
         btnPrestamos.addActionListener(e -> irPrestamos.run());

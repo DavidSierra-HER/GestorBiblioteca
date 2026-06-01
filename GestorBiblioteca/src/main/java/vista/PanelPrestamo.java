@@ -39,7 +39,7 @@ public class PanelPrestamo extends JPanel {
     private JTable tabla;
     private DefaultTableModel modelo;
 
-    // Controlador
+    // Controlador.
     private PrestamoControlador controlador = new PrestamoControlador();
 
     public PanelPrestamo(Runnable volverInicio) {

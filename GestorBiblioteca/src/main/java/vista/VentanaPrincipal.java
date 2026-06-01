@@ -31,7 +31,7 @@ public class VentanaPrincipal {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        // CardLayout para cambiar entre paneles
+        // CardLayout para cambiar entre paneles.
         cardLayout = new CardLayout();
         panelPrincipal = new JPanel(cardLayout);
 
