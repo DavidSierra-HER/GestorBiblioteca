@@ -230,6 +230,44 @@ public class PrestamoDaoimp implements PrestamoDAO{
 		}
 }
 	
+	//metodo para buscar por paginas en los JTable
+	@Override
+	public List<Prestamo> obtenerPagina(int pagina, int tamPagina) {
+	    List<Prestamo> lista = new ArrayList<>();
+	    String sql = "SELECT * FROM prestamo ORDER BY ID LIMIT ? OFFSET ?";
+
+	    try (PreparedStatement stmt =
+	         ConexionDB.getInstance().getConnection().prepareStatement(sql)) {
+
+	        stmt.setInt(1, tamPagina);
+	        stmt.setInt(2, pagina * tamPagina);
+
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+
+	        	Prestamo p = new Prestamo(
+	        		    rs.getString("ID"),
+	        		    rs.getString("ESTADO"),
+	        		    rs.getDate("FECHA_PRESTAMO").toLocalDate(),
+	        		    rs.getDate("DEVOLUCION_ESTIMADA").toLocalDate(),
+	        		    rs.getDate("FECHA_DEVOLUCION") != null
+	        		        ? rs.getDate("FECHA_DEVOLUCION").toLocalDate()
+	        		        : null,
+	        		    libroDAO.buscarISBN(rs.getString("libro_prestado")),
+	        		    socioDAO.buscarDNI(rs.getString("socio_prestamo"))
+	        		);
+
+
+	            lista.add(p);
+	        }
+
+	    } catch (SQLException e) {
+	        System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+	    }
+
+	    return lista;
+	}
+
 
 
 }

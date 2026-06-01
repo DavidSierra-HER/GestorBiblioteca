@@ -21,5 +21,6 @@ public interface SocioDAO {
 	public void eliminarSocio(String dni);
 	public Socio buscarDNI(String dni);
 	public void purgarTabla();
+	public List<Socio> obtenerPagina(int pagina, int tamPagina);
 
 }

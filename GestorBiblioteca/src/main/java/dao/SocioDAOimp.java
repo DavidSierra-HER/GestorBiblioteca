@@ -152,5 +152,36 @@ public class SocioDAOimp implements SocioDAO{
 		}
 }
 	
+	//Obtiene el paginado de los JTable
+	@Override
+	public List<Socio> obtenerPagina(int pagina, int tamPagina) {
+	    List<Socio> lista = new ArrayList<>();
+	    String sql = "SELECT * FROM socio ORDER BY NOMBRE LIMIT ? OFFSET ?";
+
+	    try (PreparedStatement stmt = 
+	         ConexionDB.getInstance().getConnection().prepareStatement(sql)) {
+
+	        stmt.setInt(1, tamPagina);
+	        stmt.setInt(2, pagina * tamPagina);
+
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            Socio s = new Socio(
+	                rs.getString("DNI"),
+	                rs.getString("NOMBRE"),
+	                rs.getString("DIRECCION"),
+	                rs.getString("TLFN"),
+	                rs.getDate("ALTA").toLocalDate()
+	            );
+	            lista.add(s);
+	        }
+
+	    } catch (SQLException e) {
+	        System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+	    }
+
+	    return lista;
+	}
+
 
 }

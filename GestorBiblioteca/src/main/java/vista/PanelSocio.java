@@ -2,9 +2,11 @@ package vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -46,6 +48,12 @@ public class PanelSocio extends JPanel {
 
     // Controlador
     private SocioControlador controlador = new SocioControlador();
+    
+    //elementos del paginado
+    private int paginaActual = 0;
+    private final int TAM_PAGINA = 10;
+    private JLabel lblPagina;
+
 
     public PanelSocio(Runnable volverInicio) {
         setLayout(new BorderLayout(0, 0));
@@ -66,42 +74,75 @@ public class PanelSocio extends JPanel {
         modelo = new DefaultTableModel(columnas, 0);
         tabla = new JTable(modelo);
         add(new JScrollPane(tabla), BorderLayout.CENTER);
+        tabla.setFillsViewportHeight(true);
+        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        add(new JScrollPane(tabla), BorderLayout.CENTER);
+        tabla.setRowHeight(28);
+        tabla.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        tabla.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        // Panel sur con formulario y botones
-        JPanel panelSur = new JPanel(new BorderLayout());
 
-        JPanel panelFormulario = new JPanel(new GridLayout(3, 4, 5, 5));
-        panelFormulario.add(new JLabel("DNI:"));
-        txtDni = new JTextField();
-        panelFormulario.add(txtDni);
-        panelFormulario.add(new JLabel("Nombre:"));
-        txtNombre = new JTextField();
-        panelFormulario.add(txtNombre);
-        panelFormulario.add(new JLabel("Dirección:"));
-        txtDireccion = new JTextField();
-        panelFormulario.add(txtDireccion);
-        panelFormulario.add(new JLabel("Teléfono:"));
-        txtTlfn = new JTextField();
-        panelFormulario.add(txtTlfn);
-        panelFormulario.add(new JLabel("Fecha Alta (YYYY-MM-DD):"));
-        txtAlta = new JTextField();
-        panelFormulario.add(txtAlta);
-        panelFormulario.add(new JLabel(""));
-        panelFormulario.add(new JLabel(""));
+   //Bloque del panel sur
 
-        JPanel panelBotones = new JPanel(new FlowLayout());
-        btnNuevo = new JButton("Nuevo");
-        btnGuardar = new JButton("Guardar");
-        btnModificar = new JButton("Modificar");
-        btnEliminar = new JButton("Eliminar");
-        panelBotones.add(btnNuevo);
-        panelBotones.add(btnGuardar);
-        panelBotones.add(btnModificar);
-        panelBotones.add(btnEliminar);
+     // Panel sur principal
+     JPanel panelSur = new JPanel(new BorderLayout());
 
-        panelSur.add(panelFormulario, BorderLayout.CENTER);
-        panelSur.add(panelBotones, BorderLayout.SOUTH);
-        add(panelSur, BorderLayout.SOUTH);
+     // Panel contenedor vertical (apila formulario + botones + paginado)
+     JPanel panelInferior = new JPanel();
+     panelInferior.setLayout(new BoxLayout(panelInferior, BoxLayout.Y_AXIS));
+
+     // formulario
+     JPanel panelFormulario = new JPanel(new GridLayout(3, 4, 5, 5));
+     panelFormulario.add(new JLabel("DNI:"));
+     txtDni = new JTextField();
+     panelFormulario.add(txtDni);
+     panelFormulario.add(new JLabel("Nombre:"));
+     txtNombre = new JTextField();
+     panelFormulario.add(txtNombre);
+     panelFormulario.add(new JLabel("Dirección:"));
+     txtDireccion = new JTextField();
+     panelFormulario.add(txtDireccion);
+     panelFormulario.add(new JLabel("Teléfono:"));
+     txtTlfn = new JTextField();
+     panelFormulario.add(txtTlfn);
+     panelFormulario.add(new JLabel("Fecha Alta (YYYY-MM-DD):"));
+     txtAlta = new JTextField();
+     panelFormulario.add(txtAlta);
+     panelFormulario.add(new JLabel(""));
+     panelFormulario.add(new JLabel(""));
+
+     // botones formulario
+     JPanel panelBotones = new JPanel(new FlowLayout());
+     btnNuevo = new JButton("Nuevo");
+     btnGuardar = new JButton("Guardar");
+     btnModificar = new JButton("Modificar");
+     btnEliminar = new JButton("Eliminar");
+
+     panelBotones.add(btnNuevo);
+     panelBotones.add(btnGuardar);
+     panelBotones.add(btnModificar);
+     panelBotones.add(btnEliminar);
+
+     // paginado
+     JButton btnAnterior = new JButton("Anterior");
+     JButton btnSiguiente = new JButton("Siguiente");
+     lblPagina = new JLabel("Página: 1");
+
+     JPanel panelPaginado = new JPanel(new FlowLayout(FlowLayout.CENTER));
+     panelPaginado.add(btnAnterior);
+     panelPaginado.add(lblPagina);
+     panelPaginado.add(btnSiguiente);
+
+     //añade el panel sur
+     panelInferior.add(panelFormulario);
+     panelInferior.add(panelBotones);
+     panelInferior.add(panelPaginado);
+
+     // Añadir el panel inferior al SUR del panel principal
+     panelSur.add(panelInferior, BorderLayout.CENTER);
+
+     // Finalmente añadir panelSur al panel principal
+     add(panelSur, BorderLayout.SOUTH);
 
         // Carga inicial
         cargarTabla();
@@ -114,6 +155,18 @@ public class PanelSocio extends JPanel {
         btnEliminar.addActionListener(e -> eliminar());
         btnBuscar.addActionListener(e -> buscar());
         tabla.getSelectionModel().addListSelectionListener(e -> seleccionarFila());
+        btnSiguiente.addActionListener(e -> {
+            paginaActual++;
+            cargarPagina();
+        });
+
+        btnAnterior.addActionListener(e -> {
+            if (paginaActual > 0) {
+                paginaActual--;
+                cargarPagina();
+            }
+        });
+
     }
 
     // Carga todos los socios en la tabla
@@ -222,4 +275,23 @@ public class PanelSocio extends JPanel {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    //muestra el paginado de los JTable
+    private void cargarPagina() {
+        modelo.setRowCount(0);
+        List<Socio> socios = controlador.obtenerPagina(paginaActual, TAM_PAGINA);
+
+        for (Socio s : socios) {
+            modelo.addRow(new Object[]{
+                s.getDni(),
+                s.getNombre(),
+                s.getDireccion(),
+                s.getTlfn(),
+                s.getAlta()
+            });
+        }
+
+        lblPagina.setText("Página: " + (paginaActual + 1));
+    }
+
 }

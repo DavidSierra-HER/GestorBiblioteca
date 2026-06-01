@@ -95,4 +95,10 @@ public class PrestamoServicio {
             throw new PrestamoVencidoException("El préstamo con id " + id + " NO existe.");
         }
     }
+    
+    //genera el paginado de las tablas
+    public List<Prestamo> obtenerPagina(int pagina, int tamPagina) {
+        return dao.obtenerPagina(pagina, tamPagina);
+    }
+
 }
