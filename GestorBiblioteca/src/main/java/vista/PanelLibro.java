@@ -40,15 +40,21 @@ public class PanelLibro extends JPanel {
 	/**
 	 * Create the panel. Generación del panel de forma automatica
 	 */
-	public PanelLibro() {
+	public PanelLibro(Runnable volverInicio) {
 		//Layout que nos deja editar un tabedpane a nuestro gusto.
 		setLayout(new BorderLayout(0,0));
+		
+		
+	
 		
 		//Estructura para colocar el buscador en la parte de Arriba izquierda, en la parte norte del Jlabel
 		JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panelBusqueda.add(new JLabel("Buscar:"));
 		txtBuscar = new JTextField(20);
 		btnBuscar = new JButton("Buscar");
+		JButton btnVolver = new JButton("← Volver");
+	    btnVolver.addActionListener(e -> volverInicio.run());
+	    panelBusqueda.add(btnVolver);
 		
 		panelBusqueda.add(txtBuscar);
 		panelBusqueda.add(btnBuscar);
@@ -246,5 +252,7 @@ public class PanelLibro extends JPanel {
 		
 		
 	}
+	
+	
 	
 }
