@@ -30,10 +30,10 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	private final String ELIMINAR = "DELETE FROM prestamo WHERE ID = ?;";
 	private final String ACTUALIZAR = "UPDATE prestamo SET ID = ?, ESTADO = ?, FECHA_PRESTAMO = ?, DEVOLUCION_ESTIMADA = ?, FECHA_DEVOLUCION = ?,LIBRO_PRESTADO = ?, SOCIO_PRESTADO = ? WHERE ID = ?;";	
 	private final String BUSCAR_POR_ID = "SELECT * FROM prestamo WHERE ID = ?;";	
-	private final String BUSCAR_POR_ACTIVOS = "SELECT * FROM prestamo WHERE ESTADO = 'ACTIVO';";	
-	private final String BUSCAR_POR_VENCIDOS = "SELECT * FROM prestamo WHERE ESTADO = 'VENCIDO'";	
-	private final String BUSCAR_POR_DEVUELTOS = "SELECT * FROM prestamo WHERE ESTADO = 'DEVUELTO'";	
-	private final String PURGARTABLA = "TRUNCATE TABLE prestamo;";
+	private final String BUSCAR_POR_ACTIVOS =  "SELECT * FROM prestamo WHERE FECHA_DEVOLUCION IS NULL AND DEVOLUCION_ESTIMADA >= CURDATE();";
+    private final String BUSCAR_POR_VENCIDOS = "SELECT * FROM prestamo WHERE FECHA_DEVOLUCION IS NULL AND DEVOLUCION_ESTIMADA < CURDATE();";
+    private final String BUSCAR_POR_DEVUELTOS = "SELECT * FROM prestamo WHERE FECHA_DEVOLUCION IS NOT NULL;";
+    private final String PURGARTABLA = "TRUNCATE TABLE prestamo;";
 	
 	//Método del listado de prestamo
 	@Override
