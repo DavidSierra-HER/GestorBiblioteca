@@ -21,12 +21,12 @@ import util.ConexionDB;
 
 public class SocioDAOimp implements SocioDAO{
 	
-	private final String OBTENER = "SELECT * FROM SOCIO ORDER BY NOMBRE;";
-	private final String REGISTRARSOCIO = "INSERT INTO SOCIO (DNI, NOMBRE, DIRECCION, TLFN,ALTA) VALUES (?, ?, ?, ?, ?);";	
-	private final String ACTUALIZAR = "UPDATE SOCIO SET DNI = ?, NOMBRE = ?, DIRECCION = ?, TLFN = ?, ALTA = ? WHERE DNI = ?;";	
-	private final String ELIMINAR = "DELETE FROM SOCIO WHERE DNI = ?;";
-	private final String BUSCAR_POR_DNI = "SELECT * FROM SOCIO WHERE DNI = ?;";	
-	private final String PURGARTABLA = "TRUNCATE TABLE SOCIO;";
+	private final String OBTENER = "SELECT * FROM socio ORDER BY NOMBRE;";
+	private final String REGISTRARSOCIO = "INSERT INTO socio (DNI, NOMBRE, DIRECCION, TLFN,ALTA) VALUES (?, ?, ?, ?, ?);";	
+	private final String ACTUALIZAR = "UPDATE socio SET DNI = ?, NOMBRE = ?, DIRECCION = ?, TLFN = ?, ALTA = ? WHERE DNI = ?;";	
+	private final String ELIMINAR = "DELETE FROM socio WHERE DNI = ?;";
+	private final String BUSCAR_POR_DNI = "SELECT * FROM socio WHERE DNI = ?;";	
+	private final String PURGARTABLA = "TRUNCATE TABLE socio;";
 	
 	
 	//metodo para obtener todo el listado de los socios

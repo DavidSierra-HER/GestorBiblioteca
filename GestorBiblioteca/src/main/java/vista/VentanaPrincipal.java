@@ -5,6 +5,15 @@ import javax.swing.*;
 
 import util.GestorFicheros;
 
+/**
+ * Está es la clase principal de vista, la ventana principal del proyecto
+ * 
+ * @author  David
+ * @version 1.0
+ * @since   2026-05-26
+ */
+
+
 public class VentanaPrincipal {
 
     private JFrame frame;

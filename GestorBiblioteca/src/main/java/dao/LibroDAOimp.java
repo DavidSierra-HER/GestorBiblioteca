@@ -19,14 +19,15 @@ import util.ConexionDB;
 public class LibroDAOimp implements LibroDAO{
 	
 	//parametros de la busqueda SQL en el apartado libro
-	private final String OBTENER = "SELECT * FROM LIBRO ORDER BY TITULO;";
-	private final String REGISTRARLIBRO = "INSERT INTO LIBRO (ISBN, TITULO, AUTOR, GENERO, ANNO,EJEMPLARES_DISPONIBLES) VALUES (?, ?, ?, ?, ?,?);";	
-	private final String ACTUALIZAR = "UPDATE LIBRO SET ISBN = ?, TITULO = ?, AUTOR = ?, GENERO = ?, ANNO = ?, EJEMPLARES_DISPONIBLES= ? WHERE ISBN = ?;";	
-	private final String ELIMINAR = "DELETE FROM LIBRO WHERE ISBN = ?;";	
-	private final String BUSCAR_POR_ISBN = "SELECT * FROM LIBRO WHERE ISBN = ?;";	
-	private final String BUSCAR_POR_AUTOR = "SELECT * FROM LIBRO WHERE AUTOR = ?;";	
-	private final String BUSCAR_POR_TITULO = "SELECT * FROM LIBRO WHERE TITULO = ?;";
-	private final String PURGARTABLA = "TRUNCATE TABLE LIBRO;";
+	private final String OBTENER = "SELECT * FROM libro ORDER BY titulo;";
+	private final String REGISTRARLIBRO = "INSERT INTO libro (ISBN, TITULO, AUTOR, GENERO, ANNO, EJEMPLARES_DISPONIBLES) VALUES (?, ?, ?, ?, ?, ?);";
+	private final String ACTUALIZAR = "UPDATE libro SET ISBN = ?, TITULO = ?, AUTOR = ?, GENERO = ?, ANNO = ?, EJEMPLARES_DISPONIBLES = ? WHERE ISBN = ?;";
+	private final String ELIMINAR = "DELETE FROM libro WHERE ISBN = ?;";
+	private final String BUSCAR_POR_ISBN = "SELECT * FROM libro WHERE ISBN = ?;";
+	private final String BUSCAR_POR_AUTOR = "SELECT * FROM libro WHERE AUTOR LIKE ?;";
+	private final String BUSCAR_POR_TITULO = "SELECT * FROM libro WHERE TITULO LIKE ?;";
+	private final String PURGARTABLA = "TRUNCATE TABLE libro;";
+
 	
 	//método para mostrar los libros
 	@Override

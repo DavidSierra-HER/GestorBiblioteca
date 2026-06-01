@@ -17,6 +17,15 @@ import javax.swing.table.DefaultTableModel;
 import controlador.LibroControlador;
 import modelo.Libro;
 
+/**
+ * Está es la clase panel de libro, la ventana principal de los libros
+ * 
+ * @author  David
+ * @version 1.0
+ * @since   2026-05-26
+ */
+
+
 public class PanelLibro extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -52,7 +61,7 @@ public class PanelLibro extends JPanel {
 		panelBusqueda.add(new JLabel("Buscar:"));
 		txtBuscar = new JTextField(20);
 		btnBuscar = new JButton("Buscar");
-		JButton btnVolver = new JButton("← Volver");
+		JButton btnVolver = new JButton("Volver");
 	    btnVolver.addActionListener(e -> volverInicio.run());
 	    panelBusqueda.add(btnVolver);
 		
