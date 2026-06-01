@@ -11,7 +11,7 @@ public class PanelInicio extends JPanel {
         setLayout(new BorderLayout());
 
         // Título.
-        JLabel titulo = new JLabel("GestorBiblioteca", SwingConstants.CENTER);
+        JLabel titulo = new JLabel("Gestor Biblioteca", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 36));
         titulo.setBorder(BorderFactory.createEmptyBorder(80, 0, 40, 0));
         add(titulo, BorderLayout.NORTH);
@@ -20,7 +20,7 @@ public class PanelInicio extends JPanel {
         JLabel subtitulo = new JLabel("Biblioteca Municipal de Ciudad Rodrigo", SwingConstants.CENTER);
         subtitulo.setFont(new Font("Arial", Font.PLAIN, 16));
 
-        // Panel central con botones
+        // Panel central con botones que llevan a los 
         JPanel panelCentro = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(15, 0, 15, 0);

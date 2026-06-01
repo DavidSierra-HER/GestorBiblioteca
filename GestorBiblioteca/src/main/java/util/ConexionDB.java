@@ -16,18 +16,11 @@ import java.util.Properties;
  */
 
 public class ConexionDB {
-	
-	//parametros para conectarlo a la db.properties y no hardcodearlo
-	Properties propiedades = new Properties();
-	InputStream input = getClass().getClassLoader().getResourceAsStream("config/db.properties");
-	
-	String url = propiedades.getProperty("db.url");
-	String usuario = propiedades.getProperty("db.usuario");
-	String contrasena = propiedades.getProperty("db.password");
-	
-	private Connection conexion = null;
-	
-	
+    
+    //parametros para conectarlo a la db.properties y no hardcodearlo
+    private Properties propiedades = new Properties();
+    private Connection conexion = null;
+    
     // Singleton
     private static ConexionDB instance;
     
@@ -40,16 +33,20 @@ public class ConexionDB {
         }
         return instance;
     }
-	
+    
     // constructor de la conexion con los atributos de la db.properties
     private ConexionDB() {
        
-    	try {
-    		//objeto donde almacenamos las claves y su valor respectivo
-            Properties propiedades = new Properties();
-            //donde están esos valores
+        try {
+            //objeto donde almacenamos las claves y su valor respectivo
             InputStream input = getClass().getClassLoader()
                                .getResourceAsStream("config/db.properties");
+            
+            //donde están esos valores
+            if (input == null) {
+                throw new RuntimeException("No se encontró el archivo db.properties en /config");
+            }
+
             //se cargan
             propiedades.load(input);
             
@@ -57,11 +54,13 @@ public class ConexionDB {
             String url = propiedades.getProperty("db.url");
             String usuario = propiedades.getProperty("db.usuario");
             String contrasena = propiedades.getProperty("db.password");
-           
+
             //lanzamos conexión
             this.conexion = DriverManager.getConnection(url, usuario, contrasena);
             
-            //errores como en el ejemplo singleton de clase
+            //debug opcional
+            System.out.println("Conectado a: " + url);
+
         } catch (SQLException e) {
             System.err.println("Error al crear la conexión con la BBDD...");
             System.err.printf("Mensaje   : %s %n", e.getMessage());
@@ -81,9 +80,7 @@ public class ConexionDB {
     // otros métodos
     public void destroyConnection() {
         try {
-            //System.out.println("Cerrando conexión con la BBDD...");
             this.conexion.close();
-            //System.out.println("Conexión con la BBDD cerrada!!");
         } catch (SQLException e) {
             System.err.println("Error al cerrar la conexión con la BBDD...");
             System.err.printf("Mensaje   : %s %n", e.getMessage());
@@ -96,3 +93,4 @@ public class ConexionDB {
     }
 
 }
+
