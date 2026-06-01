@@ -113,4 +113,10 @@ public class LibroServicio {
             throw new LibroNoEncontradoException("El ISBN " + isbn + " NO existe.");
         }
     }
+    
+    //obtiene el paginado de los Jtable
+    public List<Libro> obtenerPagina(int pagina, int tamPagina) {
+        return dao.obtenerPagina(pagina, tamPagina);
+    }
+
 }

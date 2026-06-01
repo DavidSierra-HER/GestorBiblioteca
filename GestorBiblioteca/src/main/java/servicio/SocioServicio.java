@@ -82,4 +82,10 @@ public class SocioServicio {
             throw new SocioNoEncontradoException("El DNI " + dni + " NO existe.");
         }
     }
+    
+    //obtiene las paginas de la Jtable
+    public List<Socio> obtenerPagina(int pagina, int tamPagina) {
+        return dao.obtenerPagina(pagina, tamPagina);
+    }
+
 }

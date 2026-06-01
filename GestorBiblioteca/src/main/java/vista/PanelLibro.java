@@ -2,9 +2,11 @@ package vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 
 import controlador.LibroControlador;
 import modelo.Libro;
+import servicio.LibroServicio;
 
 /**
  * Está es la clase panel de libro, la ventana principal de los libros
@@ -45,6 +48,12 @@ public class PanelLibro extends JPanel {
 	//Para editar las tablas 
 	private JTable tabla;
 	private DefaultTableModel modelo;
+	
+	//Paginado
+	private JLabel lblPagina;
+	private int paginaActual = 0;
+	private final int TAM_PAGINA = 10;
+
 
 	/**
 	 * Create the panel. Generación del panel de forma automatica
@@ -78,54 +87,81 @@ public class PanelLibro extends JPanel {
 		modelo = new DefaultTableModel(columnas,0);
 		tabla = new JTable(modelo);
 		add(new JScrollPane(tabla),BorderLayout.CENTER);
+		tabla.setFillsViewportHeight(true);
+		tabla.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		add(new JScrollPane(tabla), BorderLayout.CENTER);
+		tabla.setRowHeight(28);
+		tabla.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		tabla.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+
 		
 		//metodo de carga de tabla
 		cargarTabla();
 		
-		//Apartado del formulari en el sur del layout 
-		
-		JPanel panelSur = new JPanel(new BorderLayout()); 
-		
-		
-		//Labels y text fields con un grid que deja un espacio de 5px 
+		// Panel sur principal
+		JPanel panelSur = new JPanel(new BorderLayout());
+
+		// Panel contenedor vertical para formulario + botones + paginado
+		JPanel panelInferior = new JPanel();
+		panelInferior.setLayout(new BoxLayout(panelInferior, BoxLayout.Y_AXIS));
+
+		// ===== FORMULARIO =====
 		JPanel panelFormulario = new JPanel(new GridLayout(3,4,5,5));
 		panelFormulario.add(new JLabel("ISBN:"));
-        txtIsbn = new JTextField();
-        panelFormulario.add(txtIsbn);
-        panelFormulario.add(new JLabel("Título:"));
-        txtTitulo = new JTextField();
-        panelFormulario.add(txtTitulo);
-        panelFormulario.add(new JLabel("Autor:"));
-        txtAutor = new JTextField();
-        panelFormulario.add(txtAutor);
-        panelFormulario.add(new JLabel("Género:"));
-        txtGenero = new JTextField();
-        panelFormulario.add(txtGenero);
-        panelFormulario.add(new JLabel("Año (YYYY-MM-DD):"));
-        txtAnno = new JTextField();
-        panelFormulario.add(txtAnno);
-        panelFormulario.add(new JLabel("Disponibles:"));
-        txtDisponible = new JTextField();
-        panelFormulario.add(txtDisponible);
-		
-		
-		//Botones debajo del formulario
-		JPanel panelBotones= new JPanel(new FlowLayout());
-		
+		txtIsbn = new JTextField();
+		panelFormulario.add(txtIsbn);
+		panelFormulario.add(new JLabel("Título:"));
+		txtTitulo = new JTextField();
+		panelFormulario.add(txtTitulo);
+		panelFormulario.add(new JLabel("Autor:"));
+		txtAutor = new JTextField();
+		panelFormulario.add(txtAutor);
+		panelFormulario.add(new JLabel("Género:"));
+		txtGenero = new JTextField();
+		panelFormulario.add(txtGenero);
+		panelFormulario.add(new JLabel("Año (YYYY-MM-DD):"));
+		txtAnno = new JTextField();
+		panelFormulario.add(txtAnno);
+		panelFormulario.add(new JLabel("Disponibles:"));
+		txtDisponible = new JTextField();
+		panelFormulario.add(txtDisponible);
+
+		// ===== BOTONES =====
+		JPanel panelBotones = new JPanel(new FlowLayout());
 		btnNuevo = new JButton("Nuevo");
 		btnGuardar = new JButton("Guardar");
 		btnModificar = new JButton("Modificar");
 		btnEliminar = new JButton("Eliminar");
-		
+
 		panelBotones.add(btnNuevo);
 		panelBotones.add(btnGuardar);
 		panelBotones.add(btnModificar);
 		panelBotones.add(btnEliminar);
-		
-		panelSur.add(panelBotones,BorderLayout.SOUTH);
-		panelSur.add(panelFormulario,BorderLayout.CENTER);
-		
+
+		// ===== PAGINADO =====
+		JButton btnAnterior = new JButton("Anterior");
+		JButton btnSiguiente = new JButton("Siguiente");
+		lblPagina = new JLabel("Página: 1");
+
+		JPanel panelPaginado = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		panelPaginado.add(btnAnterior);
+		panelPaginado.add(lblPagina);
+		panelPaginado.add(btnSiguiente);
+
+		// ===== AÑADIR TODO AL PANEL INFERIOR =====
+		panelInferior.add(panelFormulario);
+		panelInferior.add(panelBotones);
+		panelInferior.add(panelPaginado);
+
+		// Añadir el panel inferior al SUR del panel principal
+		panelSur.add(panelInferior, BorderLayout.CENTER);
+
+		// Finalmente añadir panelSur al panel principal
 		add(panelSur, BorderLayout.SOUTH);
+
+
+
+
 		
 		
 		//ActionListener de los botones y evento de la tabla para poder manipular las secciones de la tabla
@@ -135,9 +171,20 @@ public class PanelLibro extends JPanel {
 		btnEliminar.addActionListener(e -> eliminar());
 		btnBuscar.addActionListener(e -> buscar());
 		tabla.getSelectionModel().addListSelectionListener(e -> seleccionarFila());
+		btnSiguiente.addActionListener(e -> {paginaActual++;cargarPagina();});
+
+		btnAnterior.addActionListener(e -> {
+		    if (paginaActual > 0) {
+		        paginaActual--;
+		        cargarPagina();
+		    }
+		});
+
 		
 		
 	}
+	
+	
 
 	
 	//Este metodo nos permite seleccionar una fila de la tabla y pone los txt field como en la fila.
@@ -261,6 +308,25 @@ public class PanelLibro extends JPanel {
 		
 		
 	}
+	
+	private void cargarPagina() {
+	    modelo.setRowCount(0);
+	    List<Libro> libros = LibroServicio.getInstance().obtenerPagina(paginaActual, TAM_PAGINA);
+
+	    for (Libro l : libros) {
+	        modelo.addRow(new Object[]{
+	            l.getIsbn(),
+	            l.getTitulo(),
+	            l.getAutor(),
+	            l.getGenero(),
+	            l.getAnno(),
+	            l.getDisponibles()
+	        });
+	    }
+
+	    lblPagina.setText("Página: " + (paginaActual + 1));
+	}
+
 	
 	
 	

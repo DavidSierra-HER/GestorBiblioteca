@@ -50,4 +50,11 @@ public class LibroControlador {
     public void eliminar(String isbn) throws LibroNoEncontradoException {
         LibroServicio.getInstance().eliminar(isbn);
     }
+    
+    //Obtiene el paginado de los JTable
+    public List<Libro> obtenerPagina(int pagina, int tamPagina) {
+        return LibroServicio.getInstance().obtenerPagina(pagina, tamPagina);
+    }
+
+
 }

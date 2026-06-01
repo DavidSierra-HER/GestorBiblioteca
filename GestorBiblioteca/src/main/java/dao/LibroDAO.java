@@ -22,5 +22,6 @@ public interface LibroDAO {
 	public List<Libro> buscarAutor(String autor);
 	public Libro buscarISBN(String isbn);
 	public void purgarTabla();
+	public List<Libro> obtenerPagina(int pagina, int tamPagina);
 	
 }

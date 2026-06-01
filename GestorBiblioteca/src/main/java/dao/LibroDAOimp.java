@@ -216,4 +216,35 @@ public class LibroDAOimp implements LibroDAO{
 				System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
 			}
 	}
+	
+	//Obtiene el paginado de los Jtable
+	@Override
+	public List<Libro> obtenerPagina(int pagina, int tamPagina) {
+	    List<Libro> lista = new ArrayList<>();
+	    String sql = "SELECT * FROM libro ORDER BY TITULO LIMIT ? OFFSET ?";
+
+	    try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(sql)) {
+	        stmt.setInt(1, tamPagina);
+	        stmt.setInt(2, pagina * tamPagina);
+
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            Libro l = new Libro(
+	                rs.getString("ISBN"),
+	                rs.getString("TITULO"),
+	                rs.getString("AUTOR"),
+	                rs.getString("GENERO"),
+	                rs.getString("ANNO"),
+	                rs.getInt("EJEMPLARES_DISPONIBLES")
+	            );
+	            lista.add(l);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return lista;
+	}
+
+	
 }

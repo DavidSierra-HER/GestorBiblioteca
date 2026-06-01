@@ -56,4 +56,10 @@ public class PrestamoControlador {
     public void devolver(Prestamo prestamo) {
         PrestamoServicio.getInstance().devolver(prestamo);
     } 
+    
+    //Devuelve llas paginas y su numero
+    public List<Prestamo> obtenerPagina(int pagina, int tamPagina) {
+        return PrestamoServicio.getInstance().obtenerPagina(pagina, tamPagina);
+    }
+
 }

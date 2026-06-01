@@ -2,10 +2,12 @@ package vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -50,6 +52,12 @@ public class PanelPrestamo extends JPanel {
 
     // Controlador.
     private PrestamoControlador controlador = new PrestamoControlador();
+    
+    //paginado
+    private int paginaActual = 0;
+    private final int TAM_PAGINA = 10;
+    private JLabel lblPagina;
+
 
     public PanelPrestamo(Runnable volverInicio) {
         setLayout(new BorderLayout(0, 0));
@@ -87,11 +95,26 @@ public class PanelPrestamo extends JPanel {
         modelo = new DefaultTableModel(columnas, 0);
         tabla = new JTable(modelo);
         add(new JScrollPane(tabla), BorderLayout.CENTER);
+        tabla.setFillsViewportHeight(true);
+        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        add(new JScrollPane(tabla), BorderLayout.CENTER);
+        tabla.setRowHeight(28);
+        tabla.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        tabla.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        // Panel sur
-        JPanel panelSur = new JPanel(new BorderLayout());
 
-        JPanel panelFormulario = new JPanel(new GridLayout(5, 4, 8, 8));
+  
+     // PANEL SUR COMPLETO
+    
+
+     JPanel panelSur = new JPanel(new BorderLayout());
+
+     // Panel contenedor vertical para formulario + botones + paginado
+     JPanel panelInferior = new JPanel();
+     panelInferior.setLayout(new BoxLayout(panelInferior, BoxLayout.Y_AXIS));
+
+     // Formulario
+     JPanel panelFormulario = new JPanel(new GridLayout(5, 4, 8, 8));
 
      // Fila 1
      panelFormulario.add(new JLabel("ID:"));
@@ -122,25 +145,42 @@ public class PanelPrestamo extends JPanel {
      txtDniSocio = new JTextField();
      panelFormulario.add(txtDniSocio);
      panelFormulario.add(new JLabel(""));
-     panelFormulario.add(new JLabel("")); // espacio vacío para simetría
+     panelFormulario.add(new JLabel(""));
 
+     // botones del formulario
+     JPanel panelBotones = new JPanel(new FlowLayout());
+     btnNuevo = new JButton("Nuevo");
+     btnGuardar = new JButton("Guardar");
+     btnDevolver = new JButton("Devolver");
+     btnEliminar = new JButton("Eliminar");
 
-        JPanel panelBotones = new JPanel(new FlowLayout());
-        btnNuevo = new JButton("Nuevo");
-        btnGuardar = new JButton("Guardar");
-        btnDevolver = new JButton("Devolver");
-        btnEliminar = new JButton("Eliminar");
-        panelBotones.add(btnNuevo);
-        panelBotones.add(btnGuardar);
-        panelBotones.add(btnDevolver);
-        panelBotones.add(btnEliminar);
+     panelBotones.add(btnNuevo);
+     panelBotones.add(btnGuardar);
+     panelBotones.add(btnDevolver);
+     panelBotones.add(btnEliminar);
 
-        panelSur.add(panelFormulario, BorderLayout.CENTER);
-        panelSur.add(panelBotones, BorderLayout.SOUTH);
-        add(panelSur, BorderLayout.SOUTH);
+     // estructura del paginado
+     JButton btnAnterior = new JButton("Anterior");
+     JButton btnSiguiente = new JButton("Siguiente");
+     lblPagina = new JLabel("Página: 1");
 
+     JPanel panelPaginado = new JPanel(new FlowLayout(FlowLayout.CENTER));
+     panelPaginado.add(btnAnterior);
+     panelPaginado.add(lblPagina);
+     panelPaginado.add(btnSiguiente);
+
+     // añadimos todos los elementos en la parte sur con el border layaout
+     panelInferior.add(panelFormulario);
+     panelInferior.add(panelBotones);
+     panelInferior.add(panelPaginado);
+
+     panelSur.add(panelInferior, BorderLayout.CENTER);
+     add(panelSur, BorderLayout.SOUTH);
+
+     
         // Carga inicial
-        cargarTabla();
+        cargarPagina();
+
 
         // ActionListeners
         btnVolver.addActionListener(e -> volverInicio.run());
@@ -154,6 +194,18 @@ public class PanelPrestamo extends JPanel {
         btnVencidos.addActionListener(e -> cargarVencidos());
         btnDevueltos.addActionListener(e -> cargarDevueltos());
         tabla.getSelectionModel().addListSelectionListener(e -> seleccionarFila());
+        btnSiguiente.addActionListener(e -> {
+            paginaActual++;
+            cargarPagina();
+        });
+
+        btnAnterior.addActionListener(e -> {
+            if (paginaActual > 0) {
+                paginaActual--;
+                cargarPagina();
+            }
+        });
+
     }
 
     // Carga todos los préstamos
@@ -332,4 +384,25 @@ public class PanelPrestamo extends JPanel {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    //metodo de carga de pagina
+    private void cargarPagina() {
+        modelo.setRowCount(0);
+        List<Prestamo> prestamos = controlador.obtenerPagina(paginaActual, TAM_PAGINA);
+
+        for (Prestamo p : prestamos) {
+            modelo.addRow(new Object[]{
+                p.getId(),
+                p.getEstado(),
+                p.getFechaPrestado(),
+                p.getDevolucionEstimada(),
+                p.getFechaDevolucion(),
+                p.getLibroPrestado().getIsbn(),
+                p.getSocioPrestamo().getDni()
+            });
+        }
+
+        lblPagina.setText("Página: " + (paginaActual + 1));
+    }
+
 }

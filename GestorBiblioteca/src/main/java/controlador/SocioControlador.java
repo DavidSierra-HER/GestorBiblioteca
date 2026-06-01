@@ -40,5 +40,12 @@ public class SocioControlador {
     // Elimina un Socio del sistema por Dni
     public void eliminar(String dni) throws SocioNoEncontradoException {
         SocioServicio.getInstance().eliminar(dni);
-    }    
+    }  
+    
+    
+    //muestra el paginado de los JTable
+    public List<Socio> obtenerPagina(int pagina, int tamPagina) {
+        return SocioServicio.getInstance().obtenerPagina(pagina, tamPagina);
+    }
+
 }
