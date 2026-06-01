@@ -27,7 +27,7 @@ public class VentanaPrincipal {
     }
 
     private void initialize() {
-        frame = new JFrame("GestorBiblioteca");
+        frame = new JFrame("Gestor Biblioteca");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 

@@ -43,7 +43,7 @@ public class PanelSocio extends JPanel {
 
         // Panel búsqueda y botón volver arriba
         JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton btnVolver = new JButton("← Volver");
+        JButton btnVolver = new JButton("Volver");
         panelBusqueda.add(btnVolver);
         panelBusqueda.add(new JLabel("Buscar:"));
         txtBuscar = new JTextField(20);

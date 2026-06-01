@@ -119,7 +119,7 @@ public class PanelLibro extends JPanel {
 		add(panelSur, BorderLayout.SOUTH);
 		
 		
-		//ActionListener de los botone y evento de la tabla para poder manipular las secciones de la tabla
+		//ActionListener de los botones y evento de la tabla para poder manipular las secciones de la tabla
 		btnNuevo.addActionListener(e -> limpiarFormulario());
 		btnGuardar.addActionListener(e ->guardar());
 		btnModificar.addActionListener(e ->modificar());

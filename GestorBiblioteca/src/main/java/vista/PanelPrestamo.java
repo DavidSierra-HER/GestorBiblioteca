@@ -45,24 +45,30 @@ public class PanelPrestamo extends JPanel {
     public PanelPrestamo(Runnable volverInicio) {
         setLayout(new BorderLayout(0, 0));
 
-        // Panel norte con volver, buscar y filtros
-        JPanel panelNorte = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton btnVolver = new JButton("← Volver");
-        panelNorte.add(btnVolver);
-        panelNorte.add(new JLabel("Buscar:"));
-        txtBuscar = new JTextField(15);
-        btnBuscar = new JButton("Buscar");
-        panelNorte.add(txtBuscar);
-        panelNorte.add(btnBuscar);
-        btnTodos = new JButton("Todos");
-        btnActivos = new JButton("Activos");
-        btnVencidos = new JButton("Vencidos");
-        btnDevueltos = new JButton("Devueltos");
-        panelNorte.add(btnTodos);
-        panelNorte.add(btnActivos);
-        panelNorte.add(btnVencidos);
-        panelNorte.add(btnDevueltos);
-        add(panelNorte, BorderLayout.NORTH);
+      // Panel norte con buscar y filtros
+      JPanel panelNorte = new JPanel(new FlowLayout(FlowLayout.LEFT));
+      panelNorte.add(new JLabel("Buscar:"));
+      txtBuscar = new JTextField(15);
+      btnBuscar = new JButton("Buscar");
+      panelNorte.add(txtBuscar);
+      panelNorte.add(btnBuscar);
+
+      // Filtros
+      btnTodos = new JButton("Todos");
+      btnActivos = new JButton("Activos");
+      btnVencidos = new JButton("Vencidos");
+      btnDevueltos = new JButton("Devueltos");
+      panelNorte.add(btnTodos);
+      panelNorte.add(btnActivos);
+      panelNorte.add(btnVencidos);
+      panelNorte.add(btnDevueltos);
+
+      // Botón volver
+      JButton btnVolver = new JButton("Volver");
+      panelNorte.add(btnVolver);
+
+      add(panelNorte, BorderLayout.NORTH);
+
 
         // Tabla
         String[] columnas = {"ID", "Estado", "Fecha Préstamo", "Dev. Estimada", "Fecha Devolución", "ISBN Libro", "DNI Socio"};
@@ -73,31 +79,39 @@ public class PanelPrestamo extends JPanel {
         // Panel sur
         JPanel panelSur = new JPanel(new BorderLayout());
 
-        JPanel panelFormulario = new JPanel(new GridLayout(4, 4, 5, 5));
-        panelFormulario.add(new JLabel("ID:"));
-        txtId = new JTextField();
-        panelFormulario.add(txtId);
-        panelFormulario.add(new JLabel("Estado:"));
-        txtEstado = new JTextField();
-        panelFormulario.add(txtEstado);
-        panelFormulario.add(new JLabel("Fecha Préstamo (YYYY-MM-DD):"));
-        txtFechaPrestamo = new JTextField();
-        panelFormulario.add(txtFechaPrestamo);
-        panelFormulario.add(new JLabel("Dev. Estimada (YYYY-MM-DD):"));
-        txtDevolucionEstimada = new JTextField();
-        panelFormulario.add(txtDevolucionEstimada);
-        panelFormulario.add(new JLabel("Fecha Devolución (YYYY-MM-DD):"));
-        txtFechaDevolucion = new JTextField();
-        panelFormulario.add(txtFechaDevolucion);
-        panelFormulario.add(new JLabel(""));
-        panelFormulario.add(new JLabel("ISBN Libro:"));
-        txtIsbnLibro = new JTextField();
-        panelFormulario.add(txtIsbnLibro);
-        panelFormulario.add(new JLabel("DNI Socio:"));
-        txtDniSocio = new JTextField();
-        panelFormulario.add(txtDniSocio);
-        panelFormulario.add(new JLabel(""));
-        panelFormulario.add(new JLabel(""));
+        JPanel panelFormulario = new JPanel(new GridLayout(5, 4, 8, 8));
+
+     // Fila 1
+     panelFormulario.add(new JLabel("ID:"));
+     txtId = new JTextField();
+     panelFormulario.add(txtId);
+     panelFormulario.add(new JLabel("Estado:"));
+     txtEstado = new JTextField();
+     panelFormulario.add(txtEstado);
+
+     // Fila 2
+     panelFormulario.add(new JLabel("Fecha Préstamo (YYYY-MM-DD):"));
+     txtFechaPrestamo = new JTextField();
+     panelFormulario.add(txtFechaPrestamo);
+     panelFormulario.add(new JLabel("Dev. Estimada (YYYY-MM-DD):"));
+     txtDevolucionEstimada = new JTextField();
+     panelFormulario.add(txtDevolucionEstimada);
+
+     // Fila 3
+     panelFormulario.add(new JLabel("Fecha Devolución (YYYY-MM-DD):"));
+     txtFechaDevolucion = new JTextField();
+     panelFormulario.add(txtFechaDevolucion);
+     panelFormulario.add(new JLabel("ISBN Libro:"));
+     txtIsbnLibro = new JTextField();
+     panelFormulario.add(txtIsbnLibro);
+
+     // Fila 4
+     panelFormulario.add(new JLabel("DNI Socio:"));
+     txtDniSocio = new JTextField();
+     panelFormulario.add(txtDniSocio);
+     panelFormulario.add(new JLabel(""));
+     panelFormulario.add(new JLabel("")); // espacio vacío para simetría
+
 
         JPanel panelBotones = new JPanel(new FlowLayout());
         btnNuevo = new JButton("Nuevo");
