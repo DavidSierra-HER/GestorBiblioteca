@@ -20,6 +20,15 @@ import modelo.Libro;
 import modelo.Prestamo;
 import modelo.Socio;
 
+/**
+ * Está es la clase principal de Panel prestamo la ventana principal para interactuar con los prestamos
+ * 
+ * @author  David
+ * @version 1.0
+ * @since   2026-05-26
+ */
+
+
 public class PanelPrestamo extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -45,8 +54,13 @@ public class PanelPrestamo extends JPanel {
     public PanelPrestamo(Runnable volverInicio) {
         setLayout(new BorderLayout(0, 0));
 
+        
       // Panel norte con buscar y filtros
       JPanel panelNorte = new JPanel(new FlowLayout(FlowLayout.LEFT));
+     
+      // Botón volver
+      JButton btnVolver = new JButton("Volver");
+      panelNorte.add(btnVolver);
       panelNorte.add(new JLabel("Buscar:"));
       txtBuscar = new JTextField(15);
       btnBuscar = new JButton("Buscar");
@@ -63,9 +77,7 @@ public class PanelPrestamo extends JPanel {
       panelNorte.add(btnVencidos);
       panelNorte.add(btnDevueltos);
 
-      // Botón volver
-      JButton btnVolver = new JButton("Volver");
-      panelNorte.add(btnVolver);
+      
 
       add(panelNorte, BorderLayout.NORTH);
 

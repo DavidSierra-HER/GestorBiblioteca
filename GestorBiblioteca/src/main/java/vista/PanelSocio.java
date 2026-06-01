@@ -17,6 +17,15 @@ import javax.swing.table.DefaultTableModel;
 import controlador.SocioControlador;
 import modelo.Socio;
 
+/**
+ * Está es la clase principal de Socio, la ventana principal de los socios
+ * 
+ * @author  David
+ * @version 1.0
+ * @since   2026-05-26
+ */
+
+
 public class PanelSocio extends JPanel {
 
     private static final long serialVersionUID = 1L;
