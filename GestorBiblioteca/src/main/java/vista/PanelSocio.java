@@ -159,7 +159,7 @@ public class PanelSocio extends JPanel {
         }
     }
 
-    // Modifica el socio seleccionado
+    // Modifica el socio seleccionado.
     private void modificar() {
         try {
             Socio socio = new Socio(
