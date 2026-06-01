@@ -28,9 +28,9 @@ public class PanelInicio extends JPanel {
         gbc.ipadx = 100;
         gbc.ipady = 30;
 
-        JButton btnLibros = new JButton("📚 Gestión de Libros");
-        JButton btnSocios = new JButton("👤 Gestión de Socios");
-        JButton btnPrestamos = new JButton("🔖 Gestión de Préstamos");
+        JButton btnLibros = new JButton("Gestión de Libros");
+        JButton btnSocios = new JButton("Gestión de Socios");
+        JButton btnPrestamos = new JButton("Gestión de Préstamos");
 
         btnLibros.setFont(new Font("Arial", Font.PLAIN, 18));
         btnSocios.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -47,7 +47,7 @@ public class PanelInicio extends JPanel {
 
         add(panelCentro, BorderLayout.CENTER);
 
-        // Eventos 1
+        // Eventos 
         btnLibros.addActionListener(e -> irLibros.run());
         btnSocios.addActionListener(e -> irSocios.run());
         btnPrestamos.addActionListener(e -> irPrestamos.run());
