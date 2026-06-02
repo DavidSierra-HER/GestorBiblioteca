@@ -3,6 +3,7 @@ package vista;
 import java.awt.*;
 import javax.swing.*;
 
+import util.ConexionDB;
 import util.GestorFicheros;
 
 /**
@@ -23,14 +24,35 @@ public class VentanaPrincipal {
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
+
+                //comprueba conexion
+                boolean conexionOK = ConexionDB.probarConexion();
+
+                // Si NO hay conexión → cargar backup
+                if (!conexionOK) {
+                    JOptionPane.showMessageDialog(null,
+                        "No se pudo conectar a la base de datos.\n" +
+                        "Se cargarán los datos desde la copia de seguridad.",
+                        "Modo Offline",
+                        JOptionPane.WARNING_MESSAGE);
+
+                    // Restauramos los datos del backup
+                    GestorFicheros gf = new GestorFicheros();
+                    gf.restaurarCopiaSeguridad();
+                }
+
+                //inicio normal en caso de bbdd activa
                 VentanaPrincipal window = new VentanaPrincipal();
                 window.frame.setVisible(true);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
-
+    
+    
+    
     public VentanaPrincipal() {
         initialize();
     }
