@@ -1,0 +1,25 @@
+# Compilación
+/target/
+*.class
+*.log
+*.tmp
+
+# Configuración sensible
+/src/main/resources/config/db.properties
+
+# Copias de seguridad
+/backup/
+*.bak
+
+# Archivos del IDE
+.classpath
+.project
+.settings/
+bin/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Maven
+.mvn/
