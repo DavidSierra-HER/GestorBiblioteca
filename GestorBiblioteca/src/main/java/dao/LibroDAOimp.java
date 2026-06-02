@@ -18,6 +18,11 @@ import util.ConexionDB;
 
 public class LibroDAOimp implements LibroDAO{
 	
+	
+	private static boolean offline = false;
+	private static List<Libro> cacheLibros = new ArrayList<>();
+	
+	
 	//parametros de la busqueda SQL en el apartado libro
 	private final String OBTENER = "SELECT * FROM libro ORDER BY titulo;";
 	private final String REGISTRARLIBRO = "INSERT INTO libro (ISBN, TITULO, AUTOR, GENERO, ANNO, EJEMPLARES_DISPONIBLES) VALUES (?, ?, ?, ?, ?, ?);";
@@ -32,6 +37,12 @@ public class LibroDAOimp implements LibroDAO{
 	//método para mostrar los libros
 	@Override
 	public List<Libro> obtenerLibros() {
+		
+	    // Si estamos en modo offline devolvemos la lista cargada desde el backup
+	    if (offline) {
+	        return cacheLibros;
+	    }
+
 		List<Libro> listaLibros= new ArrayList<Libro>();
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection()
 				.prepareStatement(OBTENER)) {
@@ -51,6 +62,18 @@ public class LibroDAOimp implements LibroDAO{
 	//metodo para modificar los libros
 	@Override
 	public boolean modificarLibro(Libro libro) {
+		
+	    // En modo offline actualizamos el libro dentro de la lista en memoria
+	    if (offline) {
+	        for (int i = 0; i < cacheLibros.size(); i++) {
+	            if (cacheLibros.get(i).getIsbn().equals(libro.getIsbn())) {
+	                cacheLibros.set(i, libro);
+	                return true;
+	            }
+	        }
+	        return false;
+	    }
+
 		boolean actualizar = false;
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(ACTUALIZAR)) {
 			stmt.setString(1, libro.getIsbn());
@@ -76,6 +99,13 @@ public class LibroDAOimp implements LibroDAO{
 	//método de registro de libros sigueindo los parametros de Libro	
 	@Override
 	public boolean registrarLibro(Libro libro) {
+		
+	    // En modo offline añadimos el libro a la lista en memoria
+	    if (offline) {
+	        cacheLibros.add(libro);
+	        return true;
+	    }
+
 		boolean registrar = false;
 		try (PreparedStatement pstmt = ConexionDB.getInstance().getConnection().prepareStatement(REGISTRARLIBRO)) {
 			pstmt.setString(1, libro.getIsbn());
@@ -98,6 +128,13 @@ public class LibroDAOimp implements LibroDAO{
 	//metodo pra eliminar libros de la biblioteca
 	@Override
 	public void eliminarLibro(String isbn) {
+	    // En modo offline eliminamos el libro de la lista en memoria
+	    if (offline) {
+	        cacheLibros.removeIf(l -> l.getIsbn().equals(isbn));
+	        return;
+	    }
+
+		
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(ELIMINAR)) {
 			stmt.setString(1, isbn);
 			
@@ -113,6 +150,18 @@ public class LibroDAOimp implements LibroDAO{
 	//buscar por titulo
 	@Override
 	public List<Libro> buscarTitulo(String titulo) {
+		
+	    // En modo offline filtramos por título dentro de la lista en memoria
+	    if (offline) {
+	        List<Libro> lista = new ArrayList<>();
+	        for (Libro l : cacheLibros) {
+	            if (l.getTitulo().toLowerCase().contains(titulo.toLowerCase())) {
+	                lista.add(l);
+	            }
+	        }
+	        return lista;
+	    }
+
 		
 		 List<Libro> listaTitulo = new ArrayList<>();
 		
@@ -145,6 +194,19 @@ public class LibroDAOimp implements LibroDAO{
 	//metodo para buscar por autor
 	@Override
 	public List<Libro>  buscarAutor(String autor) {
+		
+	    // En modo offline filtramos por autor dentro de la lista en memoria
+	    if (offline) {
+	        List<Libro> lista = new ArrayList<>();
+	        for (Libro l : cacheLibros) {
+	            if (l.getAutor().toLowerCase().contains(autor.toLowerCase())) {
+	                lista.add(l);
+	            }
+	        }
+	        return lista;
+	    }
+
+		
 		 List<Libro> listaAutor = new ArrayList<>();
 			
 		 try(PreparedStatement stmt =ConexionDB.getInstance().getConnection().prepareStatement(BUSCAR_POR_AUTOR)){
@@ -176,6 +238,15 @@ public class LibroDAOimp implements LibroDAO{
 	//metodo para buscar por isbn
 	@Override
 	public Libro buscarISBN(String isbn) {
+		
+	    // En modo offline buscamos dentro de la lista cargada
+	    if (offline) {
+	        return cacheLibros.stream()
+	                .filter(l -> l.getIsbn().equals(isbn))
+	                .findFirst()
+	                .orElse(null);
+	    }
+
 		
 		    Libro libro = null;
 
@@ -220,6 +291,15 @@ public class LibroDAOimp implements LibroDAO{
 	//Obtiene el paginado de los Jtable
 	@Override
 	public List<Libro> obtenerPagina(int pagina, int tamPagina) {
+	    // En modo offline devolvemos un sublist manual
+	    if (offline) {
+	        int inicio = pagina * tamPagina;
+	        int fin = Math.min(inicio + tamPagina, cacheLibros.size());
+	        if (inicio >= cacheLibros.size()) return new ArrayList<>();
+	        return cacheLibros.subList(inicio, fin);
+	    }
+
+		
 	    List<Libro> lista = new ArrayList<>();
 	    String sql = "SELECT * FROM libro ORDER BY TITULO LIMIT ? OFFSET ?";
 
@@ -245,6 +325,14 @@ public class LibroDAOimp implements LibroDAO{
 
 	    return lista;
 	}
+	
+	
+//	Activa el modo offline y carga la lista de libros desde el backup
+	 public static void setModoOffline(List<Libro> lista) {
+	        offline = true;
+	        cacheLibros = lista;
+	        System.out.println("LibroDAOimp funcionando en MODO OFFLINE. Libros cargados: " + cacheLibros.size());
+	    }
 
 	
 }

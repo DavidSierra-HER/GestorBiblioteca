@@ -19,6 +19,11 @@ import util.ConexionDB;
 
 public class PrestamoDaoimp implements PrestamoDAO{
 	
+	
+	private static boolean offline = false;
+	private static List<Prestamo> cachePrestamos = new ArrayList<>();
+	 
+	 
 	//Objetos para implementar los metodos de Socio y Libro dentro de Prestamo
 	private LibroDAOimp libroDAO = new LibroDAOimp();
 	private SocioDAOimp socioDAO = new SocioDAOimp();
@@ -38,6 +43,12 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	//Método del listado de prestamo
 	@Override
 	public List<Prestamo> obtenerTodosLosPrestamos() {
+		
+	    if (offline) {
+	        return cachePrestamos;
+	    }
+
+		
 		List<Prestamo> listaPrestamo= new ArrayList<Prestamo>();
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection()
 				.prepareStatement(OBTENER)) {
@@ -56,6 +67,13 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	//Método de registro de prestamo
 	@Override
 	public boolean registrarPrestamo(Prestamo prestamo) {
+		
+	    if (offline) {
+	        cachePrestamos.add(prestamo);
+	        return true;
+	    }
+
+		
 		boolean registrar = false;
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(REGISTRARPRESTAMO)) {
 			stmt.setString(1, prestamo.getId());
@@ -89,6 +107,18 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	//Actualización del estado del Prestamo
 	@Override
 	public boolean actualizarEstado(Prestamo prestamo) {
+		
+	    if (offline) {
+	        for (int i = 0; i < cachePrestamos.size(); i++) {
+	            if (cachePrestamos.get(i).getId().equals(prestamo.getId())) {
+	                cachePrestamos.set(i, prestamo);
+	                return true;
+	            }
+	        }
+	        return false;
+	    }
+
+		
 		boolean actualizar = false;
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(ACTUALIZAR)) {
 			stmt.setString(1, prestamo.getId());
@@ -122,6 +152,13 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	//Eliminar el prestamo
 	@Override
 	public void eliminarPrestamo(int id) {
+		
+	    if (offline) {
+	        cachePrestamos.removeIf(p -> p.getId().equals(String.valueOf(id)));
+	        return;
+	    }
+
+		
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(ELIMINAR)) {
 			stmt.setInt(1, id);
 			
@@ -137,6 +174,15 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	//busca de prestamo por ID
 	@Override
 	public Prestamo obtenerPorId(int id) {
+		
+	    if (offline) {
+	        return cachePrestamos.stream()
+	                .filter(p -> p.getId().equals(String.valueOf(id)))
+	                .findFirst()
+	                .orElse(null);
+	    }
+
+		
 		Prestamo prestamo = null;
 
 		    try (PreparedStatement stmt = ConexionDB.getInstance()
@@ -170,6 +216,19 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	//Listado de prestamos activos
 	@Override
 	public List<Prestamo> buscarPrestamosActivos() {
+		
+	    if (offline) {
+	        List<Prestamo> lista = new ArrayList<>();
+	        for (Prestamo p : cachePrestamos) {
+	            if (p.getFechaDevolucion() == null &&
+	                p.getDevolucionEstimada().isAfter(java.time.LocalDate.now())) {
+	                lista.add(p);
+	            }
+	        }
+	        return lista;
+	    }
+
+		
 		List<Prestamo> listaPrestamo= new ArrayList<Prestamo>();
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection()
 				.prepareStatement(BUSCAR_POR_ACTIVOS)) {
@@ -187,6 +246,19 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	//listado de prestamos vencidos
 	@Override
 	public List<Prestamo> buscarPrestamosVencidos() {
+		
+	    if (offline) {
+	        List<Prestamo> lista = new ArrayList<>();
+	        for (Prestamo p : cachePrestamos) {
+	            if (p.getFechaDevolucion() == null &&
+	                p.getDevolucionEstimada().isBefore(java.time.LocalDate.now())) {
+	                lista.add(p);
+	            }
+	        }
+	        return lista;
+	    }
+
+		
 		List<Prestamo> listaPrestamo= new ArrayList<Prestamo>();
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection()
 				.prepareStatement(BUSCAR_POR_VENCIDOS)) {
@@ -205,6 +277,18 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	//listado deprestamos devueltos
 	@Override
 	public List<Prestamo> buscarPrestamosDevueltos() {
+		
+	    if (offline) {
+	        List<Prestamo> lista = new ArrayList<>();
+	        for (Prestamo p : cachePrestamos) {
+	            if (p.getFechaDevolucion() != null) {
+	                lista.add(p);
+	            }
+	        }
+	        return lista;
+	    }
+
+		
 		List<Prestamo> listaPrestamo= new ArrayList<Prestamo>();
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection()
 				.prepareStatement(BUSCAR_POR_DEVUELTOS)) {
@@ -233,6 +317,15 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	//metodo para buscar por paginas en los JTable
 	@Override
 	public List<Prestamo> obtenerPagina(int pagina, int tamPagina) {
+		
+	    if (offline) {
+	        int inicio = pagina * tamPagina;
+	        int fin = Math.min(inicio + tamPagina, cachePrestamos.size());
+	        if (inicio >= cachePrestamos.size()) return new ArrayList<>();
+	        return cachePrestamos.subList(inicio, fin);
+	    }
+
+		
 	    List<Prestamo> lista = new ArrayList<>();
 	    String sql = "SELECT * FROM prestamo ORDER BY ID LIMIT ? OFFSET ?";
 
@@ -269,5 +362,10 @@ public class PrestamoDaoimp implements PrestamoDAO{
 	}
 
 
+	public static void setModoOffline(List<Prestamo> lista) {
+        offline = true;
+        cachePrestamos = lista;
+        System.out.println("PrestamoDaoimp funcionando en MODO OFFLINE. Prestamos cargados: " + cachePrestamos.size());
+    }
 
 }

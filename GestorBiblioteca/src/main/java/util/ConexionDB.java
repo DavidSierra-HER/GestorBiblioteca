@@ -20,6 +20,7 @@ public class ConexionDB {
     //parametros para conectarlo a la db.properties y no hardcodearlo
     private Properties propiedades = new Properties();
     private Connection conexion = null;
+    private boolean conexionDisponible = false;
     
     // Singleton
     private static ConexionDB instance;
@@ -90,6 +91,21 @@ public class ConexionDB {
             instance = null;
         }
 
+    }
+    
+    // Devuelve true si la conexión con la BBDD está activa.
+    public boolean isConexionDisponible() {
+        return conexionDisponible;
+    }
+    
+    
+    
+//    Método auxiliar para probar la conexión sin afectar al Singleton.
+//     Se crea una instancia temporal SOLO para comprobar si la BBDD responde.
+     
+    public static boolean probarConexion() {
+        ConexionDB temp = new ConexionDB();  
+        return temp.isConexionDisponible();  
     }
 
 }

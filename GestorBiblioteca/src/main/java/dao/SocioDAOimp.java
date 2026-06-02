@@ -21,6 +21,11 @@ import util.ConexionDB;
 
 public class SocioDAOimp implements SocioDAO{
 	
+	
+	private static boolean offline = false;
+	private static List<Socio> cacheSocios = new ArrayList<>();
+	
+	
 	private final String OBTENER = "SELECT * FROM socio ORDER BY NOMBRE;";
 	private final String REGISTRARSOCIO = "INSERT INTO socio (DNI, NOMBRE, DIRECCION, TLFN,ALTA) VALUES (?, ?, ?, ?, ?);";	
 	private final String ACTUALIZAR = "UPDATE socio SET DNI = ?, NOMBRE = ?, DIRECCION = ?, TLFN = ?, ALTA = ? WHERE DNI = ?;";	
@@ -32,6 +37,13 @@ public class SocioDAOimp implements SocioDAO{
 	//metodo para obtener todo el listado de los socios
 	@Override
 	public List<Socio> obtenerSocio() {
+		
+	    // Si estamos en modo offline devolvemos la lista cargada desde el backup
+	    if (offline) {
+	        return cacheSocios;
+	    }
+
+		
 		List<Socio> listaSocio= new ArrayList<Socio>();
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection()
 				.prepareStatement(OBTENER)) {
@@ -50,6 +62,14 @@ public class SocioDAOimp implements SocioDAO{
 	//metodo de registro de los socios
 	@Override
 	public boolean registrarSocio(Socio socio) {
+		
+	    // En modo offline añadimos el socio a la lista en memoria
+	    if (offline) {
+	        cacheSocios.add(socio);
+	        return true;
+	    }
+
+		
 		boolean registrar = false;
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(REGISTRARSOCIO)) {
 			stmt.setString(1, socio.getDni());
@@ -74,6 +94,19 @@ public class SocioDAOimp implements SocioDAO{
 	//metodo de modificacion de los socios
 	@Override
 	public boolean modificarSocio(Socio socio) {
+		
+	    // En modo offline actualizamos el socio dentro de la lista en memoria
+	    if (offline) {
+	        for (int i = 0; i < cacheSocios.size(); i++) {
+	            if (cacheSocios.get(i).getDni().equals(socio.getDni())) {
+	                cacheSocios.set(i, socio);
+	                return true;
+	            }
+	        }
+	        return false;
+	    }
+
+		
 		boolean actualizar = false;
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(ACTUALIZAR)) {
 			stmt.setString(1, socio.getDni());
@@ -99,6 +132,14 @@ public class SocioDAOimp implements SocioDAO{
 	//metodo de eliminacion de socios
 	@Override
 	public void eliminarSocio(String dni) {
+		
+	    // En modo offline eliminamos el socio de la lista en memoria
+	    if (offline) {
+	        cacheSocios.removeIf(s -> s.getDni().equals(dni));
+	        return;
+	    }
+
+		
 		try (PreparedStatement stmt = ConexionDB.getInstance().getConnection().prepareStatement(ELIMINAR)) {
 			stmt.setString(1, dni);
 			
@@ -114,6 +155,16 @@ public class SocioDAOimp implements SocioDAO{
 	//busqueda por DNI el metodo 
 	@Override
 	public Socio buscarDNI(String dni) {
+		
+	    // En modo offline buscamos dentro de la lista cargada
+	    if (offline) {
+	        return cacheSocios.stream()
+	                .filter(s -> s.getDni().equals(dni))
+	                .findFirst()
+	                .orElse(null);
+	    }
+
+		
 		 Socio socio = null;
 
 		    try (PreparedStatement stmt = ConexionDB.getInstance()
@@ -155,6 +206,16 @@ public class SocioDAOimp implements SocioDAO{
 	//Obtiene el paginado de los JTable
 	@Override
 	public List<Socio> obtenerPagina(int pagina, int tamPagina) {
+		
+	    // En modo offline devolvemos un sublist manual
+	    if (offline) {
+	        int inicio = pagina * tamPagina;
+	        int fin = Math.min(inicio + tamPagina, cacheSocios.size());
+	        if (inicio >= cacheSocios.size()) return new ArrayList<>();
+	        return cacheSocios.subList(inicio, fin);
+	    }
+
+		
 	    List<Socio> lista = new ArrayList<>();
 	    String sql = "SELECT * FROM socio ORDER BY NOMBRE LIMIT ? OFFSET ?";
 
@@ -183,5 +244,11 @@ public class SocioDAOimp implements SocioDAO{
 	    return lista;
 	}
 
+//	 Activa el modo offline y carga la lista de socios desde el backup.
+	   public static void setModoOffline(List<Socio> lista) {
+	        offline = true;
+	        cacheSocios = lista;
+	        System.out.println("SocioDAOimp funcionando en MODO OFFLINE. Socios cargados: " + cacheSocios.size());
+	    }
 
 }

@@ -74,28 +74,49 @@ public class GestorFicheros implements Serializable   {
 		List<Socio> socios = (List<Socio>) ois.readObject();
 	    List<Prestamo> prestamos = (List<Prestamo>) ois.readObject();
 	    
-	    prestamoDAO.purgarTabla();
-	    socioDAO.purgarTabla();
-	    libroDAO.purgarTabla();
-	    
-	    for(Libro l : libros) {
-	    	libroDAO.registrarLibro(l);
-	    }for(Socio s : socios) {
-	    	socioDAO.registrarSocio(s);
-	    }for(Prestamo p : prestamos) {
-	    	prestamoDAO.registrarPrestamo(p);
-	    }
-	    
-	    
-	    
-	} catch (ClassNotFoundException e) {
-	    e.printStackTrace();
-	} catch (FileNotFoundException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	} catch (IOException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
+
+        if (ConexionDB.getInstance().isConexionDisponible()) {
+
+            // Purga de tablas para evitar duplicados
+            prestamoDAO.purgarTabla();
+            socioDAO.purgarTabla();
+            libroDAO.purgarTabla();
+
+            // Insertamos de nuevo todos los elementos
+            for (Libro l : libros) {
+                libroDAO.registrarLibro(l);
+            }
+            for (Socio s : socios) {
+                socioDAO.registrarSocio(s);
+            }
+            for (Prestamo p : prestamos) {
+                prestamoDAO.registrarPrestamo(p);
+            }
+
+            System.out.println("Restauración completada en la base de datos.");
+        }
+
+        // ============================================================
+        //   MODO OFFLINE → cargar datos en memoria
+        // ============================================================
+        else {
+
+            // Activamos modo offline en los DAOs
+            LibroDAOimp.setModoOffline(libros);
+            SocioDAOimp.setModoOffline(socios);
+            PrestamoDaoimp.setModoOffline(prestamos);
+
+            System.out.println("Restauración completada en modo OFFLINE (sin BD).");
+        }
+
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    } catch (FileNotFoundException e1) {
+        e1.printStackTrace();
+    } catch (IOException e1) {
+        e1.printStackTrace();
+    
 	}
-	}
+}
+	
 }
