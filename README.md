@@ -1,4 +1,4 @@
-[README (1).md](https://github.com/user-attachments/files/29175408/README.1.md)
+[README.md](https://github.com/user-attachments/files/29175408/README.1.md)
 # GestorBiblioteca
 
 Sistema de gestión de biblioteca desarrollado en Java como proyecto final del módulo de Programación de 1º DAM.
