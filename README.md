@@ -96,24 +96,6 @@ src/main/resources/
 - **Copia de seguridad** → Serialización de datos a fichero `.bak` y restauración
 - **Menú principal** → Pantalla de inicio con navegación a cada módulo
 
----
-
-## Capturas de pantalla
-
-### Pantalla de inicio
-![Pantalla inicio](docs/capturas/inicio.png)
-
-### Gestión de libros
-![Panel libros](docs/capturas/libros.png)
-
-### Gestión de socios
-![Panel socios](docs/capturas/socios.png)
-
-### Gestión de préstamos
-![Panel prestamos](docs/capturas/prestamos.png)
-
----
-
 ## Autor
 
 **David**
