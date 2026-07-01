@@ -1,4 +1,5 @@
-[README.md](https://github.com/user-attachments/files/29175408/README.1.md)
+[README.md](https://github.com/user-attachments/files/29544575/README.md)
+
 # GestorBiblioteca
 
 Sistema de gestión de biblioteca desarrollado en Java como proyecto final del módulo de Programación de 1º DAM.
@@ -20,6 +21,7 @@ GestorBiblioteca es una aplicación de escritorio que permite gestionar el catá
 - Maven (gestión de dependencias)
 - MySQL Connector J 8.0.33
 - Log4j 2.26.0
+- Railway.app
 
 ---
 
@@ -48,18 +50,14 @@ Abre MySQL Workbench y ejecuta el script:
 src/main/resources/bd/biblioteca.sql
 ```
 
-Esto creará la base de datos `GESTORBIBLIOTECA` con las tablas `LIBRO`, `SOCIO` y `PRESTAMO`.
 
 ### 3. Configurar la conexión
 
-Edita el archivo `src/main/resources/config/db.properties` con tus credenciales:
-
-```properties
 db.driver=com.mysql.cj.jdbc.Driver
-db.url=jdbc:mysql://localhost:3306/GESTORBIBLIOTECA
+db.url=jdbc:mysql://shuttle.proxy.rlwy.net:58814/gestorbiblioteca
 db.usuario=root
-db.password=tuContraseña
-```
+db.password=hxQhkoTjSsYjlXSceRuCWrFuaheZtouM
+
 
 ### 4. Compilar y ejecutar
 
@@ -75,7 +73,7 @@ Desde Eclipse:
 src/main/java/
 ├── modelo/          → Entidades: Libro, Socio, Prestamo
 ├── dao/             → Interfaces DAO e implementaciones JDBC
-├── servicio/        → Lógica de negocio
+├── servicio/        → Lógica
 ├── controlador/     → Controladores MVC
 ├── vista/           → Interfaz gráfica Swing
 ├── util/            → ConexionDB, GestorFicheros, Validaciones
