@@ -50,13 +50,12 @@ Abre MySQL Workbench y ejecuta el script:
 src/main/resources/bd/biblioteca.sql
 ```
 
-
 ### 3. Configurar la conexión
 
 db.driver=com.mysql.cj.jdbc.Driver
-db.url=jdbc:mysql://shuttle.proxy.rlwy.net:58814/gestorbiblioteca
-db.usuario=root
-db.password=hxQhkoTjSsYjlXSceRuCWrFuaheZtouM
+db.url=jdbc:mysql://localhost:3306/gestorbiblioteca
+db.usuario=TU_USUARIO
+db.password=TU_PASSWORD
 
 
 ### 4. Compilar y ejecutar
