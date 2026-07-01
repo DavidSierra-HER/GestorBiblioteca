@@ -1,5 +1,0 @@
-# Ignorar Javadocs y HTML generado para estadísticas de lenguaje
-docs/**/* linguist-generated=true
-docs/**/* linguist-vendored=true
-GestorBiblioteca/javadocs/**/* linguist-generated=true
-*.html linguist-detectable=false
